@@ -23,6 +23,20 @@ pipeline {
             }
         }
 
+        stage('Prepare Environment') {
+            steps {
+                sh '''
+                    echo "Copying production environment file..."
+
+                    cp /opt/project-management/.env .env
+
+                    chmod 600 .env
+
+                    echo ".env file prepared successfully."
+                '''
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 sh '''
@@ -54,6 +68,7 @@ pipeline {
                     sleep 10
 
                     echo "Checking API health..."
+
                     curl -f http://localhost/api/health
                 '''
             }
@@ -76,4 +91,6 @@ pipeline {
         }
     }
 }
+
+
 
